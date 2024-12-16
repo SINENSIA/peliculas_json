@@ -1,34 +1,114 @@
 {
+    "The Godfather": {
+        "Title": "The Godfather",
+        "Year": "2006",
+        "imdbID": "tt0442674",
+        "Type": "game",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BMTQyNTE4NzMzNF5BMl5BanBnXkFtZTgwMDgzNTY3MDE@._V1_SX300.jpg"
+    },
+    "The Godfather Part II": {
+        "Title": "The Godfather Part II",
+        "Year": "1974",
+        "imdbID": "tt0071562",
+        "Type": "movie",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BNzc1OWY5MjktZDllMi00ZDEzLWEwMGItYjk1YmRhYjBjNTVlXkEyXkFqcGc@._V1_SX300.jpg"
+    },
+    "The Godfather Part III": {
+        "Title": "The Godfather Part III",
+        "Year": "1990",
+        "imdbID": "tt0099674",
+        "Type": "movie",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BMDVjODgzNTEtNjBiNS00ODBjLWEwZjUtMDljZTFhOTA4M2MxXkEyXkFqcGc@._V1_SX300.jpg"
+    },
+    "Godfather of Harlem": {
+        "Title": "Godfather of Harlem",
+        "Year": "2019\u2013",
+        "imdbID": "tt8080122",
+        "Type": "series",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BMWQ2NTliYWItYjFhMS00ODgyLWIzODYtMGVlMTAzYTNjOGZmXkEyXkFqcGc@._V1_SX300.jpg"
+    },
+    "The Godfather Trilogy: 1901-1980": {
+        "Title": "The Godfather Trilogy: 1901-1980",
+        "Year": "1992",
+        "imdbID": "tt0150742",
+        "Type": "movie",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BMjk5ODZjYmMtYTJjNy00MTU2LWI5OTYtYTg5YjFlMDk3ZjI0XkEyXkFqcGdeQXVyODAyNDE3Mw@@._V1_SX300.jpg"
+    },
+    "Godfather": {
+        "Title": "Godfather",
+        "Year": "1991",
+        "imdbID": "tt0353496",
+        "Type": "movie",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BYjI2YmJhMTUtYjEzYS00N2VmLTlmMzMtZGQ1MjZhNmY0ODdiXkEyXkFqcGdeQXVyMTEzNzg0Mjkx._V1_SX300.jpg"
+    },
+    "Miracles: The Canton Godfather": {
+        "Title": "Miracles: The Canton Godfather",
+        "Year": "1989",
+        "imdbID": "tt0098019",
+        "Type": "movie",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BMWMzMTBkZTItYjIxYi00MGYyLTg5OTktYjMxNzhlMjM2Y2U2XkEyXkFqcGc@._V1_SX300.jpg"
+    },
     "Avatar": {
+        "Title": "Avatar",
         "Year": "2009",
-        "imdbID": "tt0499549"
+        "imdbID": "tt0499549",
+        "Type": "movie",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BMDEzMmQwZjctZWU2My00MWNlLWE0NjItMDJlYTRlNGJiZjcyXkEyXkFqcGc@._V1_SX300.jpg"
     },
     "Avatar: The Way of Water": {
+        "Title": "Avatar: The Way of Water",
         "Year": "2022",
-        "imdbID": "tt1630029"
-    },
-    "Avatar: The Last Airbender": {
-        "Year": "2024\u2013",
-        "imdbID": "tt9018736"
+        "imdbID": "tt1630029",
+        "Type": "movie",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BNmQxNjZlZTctMWJiMC00NGMxLWJjNTctNTFiNjA1Njk3ZDQ5XkEyXkFqcGc@._V1_SX300.jpg"
     },
     "The King's Avatar": {
+        "Title": "The King's Avatar",
         "Year": "2017\u2013",
-        "imdbID": "tt6859260"
+        "imdbID": "tt6859260",
+        "Type": "series",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BZjljOTI1NzItNjhjOS00YWEyLWEwODktNmEyYWFhYzhjZDgwXkEyXkFqcGc@._V1_SX300.jpg"
     },
     "Dasham Avatar": {
+        "Title": "Dasham Avatar",
         "Year": "2023",
-        "imdbID": "tt27561990"
+        "imdbID": "tt27561990",
+        "Type": "movie",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BYjZjNWE4NDItNTQzZi00YTNjLWEyOTctMjk1MWE5YzgzNmRiXkEyXkFqcGc@._V1_SX300.jpg"
     },
     "Avatar: The Last Airbender - The Legend of Aang": {
+        "Title": "Avatar: The Last Airbender - The Legend of Aang",
         "Year": "2006",
-        "imdbID": "tt0959552"
+        "imdbID": "tt0959552",
+        "Type": "game",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BNjUwNzA5Nzc4N15BMl5BanBnXkFtZTgwNjM1ODY4MDE@._V1_SX300.jpg"
     },
     "Avatar: The Game": {
+        "Title": "Avatar: The Game",
         "Year": "2009",
-        "imdbID": "tt1517155"
+        "imdbID": "tt1517155",
+        "Type": "game",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BMTYxODI2OTI4MF5BMl5BanBnXkFtZTcwNjI1NzMwMw@@._V1_SX300.jpg"
     },
     "Avatar: The Last Airbender - The Legend So Far": {
+        "Title": "Avatar: The Last Airbender - The Legend So Far",
         "Year": "2005",
-        "imdbID": "tt1605838"
+        "imdbID": "tt1605838",
+        "Type": "movie",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BMTc0M2RmMTQtNGQ2Zi00ODkzLWJlMzUtYmQyYTBkNGQ2MDA3XkEyXkFqcGc@._V1_SX300.jpg"
+    },
+    "The Godfather Saga": {
+        "Title": "The Godfather Saga",
+        "Year": "1977",
+        "imdbID": "tt0809488",
+        "Type": "series",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BOWExNTJlZDItMzU5OS00MjMxLThiZTktZDNmN2JmMTFiZTY0XkEyXkFqcGc@._V1_SX300.jpg"
+    },
+    "Avatar: The Last Airbender": {
+        "Title": "Avatar: The Last Airbender",
+        "Year": "2024\u2013",
+        "imdbID": "tt9018736",
+        "Type": "series",
+        "Poster": "https://m.media-amazon.com/images/M/MV5BZjQ1YTZmMjItZmZkMC00MGVmLTk1OTUtNzQzZTJjZGM1NjVlXkEyXkFqcGc@._V1_SX300.jpg"
     }
 }

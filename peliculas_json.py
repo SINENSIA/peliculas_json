@@ -4,6 +4,7 @@ import re
 import json
 import requests
 from dotenv import load_dotenv
+from models.Pelicula import Pelicula
 
 load_dotenv()
 
@@ -27,12 +28,12 @@ def limpiar_terminal():
         os.system('clear')
 
 
-def sincronizar_peliculas(peliculas):
+def sincronizar_peliculas():
     """
-    Permite sincronizar las películas desde la API.
-    Incluye confirmación del usuario y la posibilidad de cambiar la cadena de búsqueda.
+    Sincroniza las películas desde la API, devolviendo solo los datos necesarios.
     """
     limpiar_terminal()
+    peliculas = cargar_datos()
     print(COLOR_AZUL + "Sincronización de películas con la API" + RESETEAR_COLOR)
     print('----------------------------')
 
@@ -51,11 +52,10 @@ def sincronizar_peliculas(peliculas):
     url = f"{ombd_url}?apikey={apikey}&s={busqueda}"
 
     try:
-        #  solicitud a la API
         print(
             COLOR_AZUL + f"Sincronizando con la búsqueda: '{busqueda}'..." + RESETEAR_COLOR)
         response = requests.get(url)
-        response.raise_for_status()  # xcepción si la respuesta tiene un error HTTP
+        response.raise_for_status()
 
         datos = response.json()
         if "Search" not in datos:
@@ -63,18 +63,23 @@ def sincronizar_peliculas(peliculas):
                 COLOR_ROJO + f"No se encontraron resultados para la búsqueda: '{busqueda}'." + RESETEAR_COLOR)
             return peliculas
 
-        # Convertir los datos
-        nuevas_peliculas = {pelicula["Title"]: {
-            "Year": pelicula["Year"], "imdbID": pelicula["imdbID"]} for pelicula in datos["Search"]}
+        # Validar y procesar cada película en "Search"
+        nuevas_peliculas = {}
+        for pelicula_data in datos["Search"]:
+            try:
+                pelicula = Pelicula(**pelicula_data)
+                nuevas_peliculas[pelicula.Title] = pelicula.model_dump(
+                    mode="json")  # Convertir a dict
+            except Exception as e:
+                print(
+                    COLOR_ROJO + f"Error al procesar película: {pelicula_data}. Detalles: {e}" + RESETEAR_COLOR)
 
-        # Fusionar l
+        # Fusionar las nuevas películas con las existentes
         peliculas_actualizadas = {**peliculas, **nuevas_peliculas}
-
         guardar_datos(peliculas_actualizadas)
+
         print(COLOR_VERDE +
               f"Películas sincronizadas exitosamente con la búsqueda '{busqueda}'." + RESETEAR_COLOR)
-
-        # Dpículas actualizadas para sincronizarlas en memoria
         return peliculas_actualizadas
 
     except requests.RequestException as e:
@@ -87,24 +92,38 @@ def sincronizar_peliculas(peliculas):
 
 
 def cargar_datos():
-    """Carga las películas desde un archivo JSON."""
+    """
+    Carga las películas desde un archivo JSON, valida los datos con el modelo Pelicula,
+    y devuelve un diccionario con las películas procesadas.
+    """
     if os.path.exists(FICHERO_JSON):
         with open(FICHERO_JSON, "r") as archivo:
             try:
-                datos = json.load(archivo)
-                if isinstance(datos, dict):
-                    return datos
-                else:
-                    print(
-                        COLOR_ROJO + "El formato del archivo no es válido. Se esperaba un diccionario." + RESETEAR_COLOR)
-                    return {}
+                datos = json.load(archivo)  # Cargar los datos desde el archivo
+                peliculas = {}
+
+                # Validar y convertir cada película
+                for titulo, detalles in datos.items():
+                    try:
+
+                        pelicula = Pelicula(**detalles)
+                        peliculas[titulo] = pelicula.model_dump(
+                            mode="json")  # Convertir a dict
+                    except Exception as e:
+                        print(
+                            COLOR_ROJO + f"Error al validar película '{titulo}': {e}" + RESETEAR_COLOR)
+
+                return peliculas  # Devolver las películas validadas
             except json.JSONDecodeError:
                 print(
-                    COLOR_ROJO + "Error al leer el archivo JSON. Asegúrate de que tiene el formato correcto." + RESETEAR_COLOR)
-                return {}
+                    COLOR_ROJO + "El archivo JSON tiene un formato inválido." + RESETEAR_COLOR)
+            except Exception as e:
+                print(
+                    COLOR_ROJO + f"Error inesperado al cargar los datos: {e}" + RESETEAR_COLOR)
     else:
         print(COLOR_ROJO + "No se encuentra el fichero JSON. Se inicializará una lista vacía." + RESETEAR_COLOR)
-    return {}
+
+    return {}  # Devuelve un diccionario vacío si ocurre algún error
 
 
 def guardar_datos(peliculas):
@@ -129,7 +148,7 @@ def mostrar_menu():
     return opcion if validar(opcion) else None
 
 
-def añadir_pelicula(peliculas):
+def añadir_pelicula():
     limpiar_terminal()
     peliculas = cargar_datos()
 
@@ -138,21 +157,25 @@ def añadir_pelicula(peliculas):
         COLOR_VERDE + "Nombre de la película a añadir: " + RESETEAR_COLOR).strip()
 
     if titulo not in peliculas:
-        año = input("Año de lanzamiento: ")
-        imdbID = input("IMDb ID: ")
+        try:
+            año = int(input("Año de lanzamiento: ").strip())
+            imdb_id = input("IMDb ID: ").strip()
 
-        peliculas[titulo] = {
-            "Year": año,
-            "imdbID": imdbID
-        }
-        guardar_datos(peliculas)
-        print(COLOR_VERDE + f"Película '{titulo}' añadida." + RESETEAR_COLOR)
+            nueva_pelicula = Pelicula(titulo=titulo, año=año, imdb_id=imdb_id)
+            peliculas[titulo] = nueva_pelicula.model_dump(
+                mode="json")
+            guardar_datos(peliculas)
+            print(COLOR_VERDE +
+                  f"Película '{titulo}' añadida." + RESETEAR_COLOR)
+        except Exception as e:
+            print(COLOR_ROJO +
+                  f"Error al añadir la película: {e}" + RESETEAR_COLOR)
     else:
         print(COLOR_AMARILLO +
               f"La película '{titulo}' ya está en la lista." + RESETEAR_COLOR)
 
 
-def eliminar_pelicula(peliculas):
+def eliminar_pelicula():
     limpiar_terminal()
     peliculas = cargar_datos()
 
@@ -181,7 +204,7 @@ def eliminar_pelicula(peliculas):
               f"Película '{pelicula_a_eliminar}' eliminada." + RESETEAR_COLOR)
 
 
-def mostrar_peliculas(peliculas):
+def mostrar_peliculas():
     limpiar_terminal()
     peliculas = cargar_datos()
 
@@ -194,7 +217,7 @@ def mostrar_peliculas(peliculas):
             f"{COLOR_AZUL}{titulo}{RESETEAR_COLOR} - Año: {detalles['Year']}, IMDb ID: {detalles['imdbID']}")
 
 
-def buscar_pelicula(peliculas):
+def buscar_pelicula():
     limpiar_terminal()
     peliculas = cargar_datos()
 
@@ -221,23 +244,50 @@ def buscar_pelicula(peliculas):
               f"No se encontraron coincidencias con '{termino}'." + RESETEAR_COLOR)
 
 
-def modificar_pelicula(peliculas):
+def modificar_pelicula():
+    """
+    Modifica los datos de una película en el diccionario, asegurando que los campos requeridos estén presentes.
+    """
     limpiar_terminal()
+    peliculas = cargar_datos()
+
     if verificar_diccionario_vacio(peliculas):
         return
 
     nombre = input(
         COLOR_VERDE + "Nombre de la película a modificar: " + RESETEAR_COLOR).strip()
+
     if nombre in peliculas:
+        # Obtener los detalles actuales de la película
+        pelicula_actual = peliculas[nombre]
+
         print("Introduce los nuevos datos (deja en blanco para no modificar):")
-        año = input(
-            f"Año actual: {peliculas[nombre]['Year']} - Nuevo Año: ").strip() or peliculas[nombre]['Year']
+        year = input(
+            f"Año actual: {pelicula_actual['Year']} - Nuevo Año: ").strip() or pelicula_actual["Year"]
         imdbID = input(
-            f"IMDb ID actual: {peliculas[nombre]['imdbID']} - Nuevo IMDb ID: ").strip() or peliculas[nombre]['imdbID']
-        peliculas[nombre] = {"Year": año, "imdbID": imdbID}
-        guardar_datos(peliculas)
-        print(COLOR_VERDE +
-              f"Película '{nombre}' modificada." + RESETEAR_COLOR)
+            f"IMDb ID actual: {pelicula_actual['imdbID']} - Nuevo IMDb ID: ").strip() or pelicula_actual["imdbID"]
+        tipo = pelicula_actual["Type"]  # Mantén el tipo original
+        title = pelicula_actual["Title"]  # Mantén el título original
+        # Mantén el póster original (si existe)
+        poster = pelicula_actual.get("Poster", None)
+
+        # Crear una nueva instancia de Pelicula para validar
+        try:
+            pelicula_modificada = Pelicula(
+                Title=title,
+                Year=year,
+                imdbID=imdbID,
+                Type=tipo,
+                Poster=poster
+            )
+            # Actualizar el diccionario con la película validada
+            peliculas[nombre] = pelicula_modificada.model_dump(mode="json")
+            guardar_datos(peliculas)
+            print(COLOR_VERDE +
+                  f"Película '{nombre}' modificada." + RESETEAR_COLOR)
+        except Exception as e:
+            print(
+                COLOR_ROJO + f"Error al validar la película modificada: {e}" + RESETEAR_COLOR)
     else:
         print(COLOR_ROJO + "Película no encontrada." + RESETEAR_COLOR)
 
@@ -255,22 +305,21 @@ def verificar_diccionario_vacio(peliculas):
 
 def main():
     limpiar_terminal()
-    peliculas = cargar_datos()
 
     while True:
         opcion = mostrar_menu()
         if opcion == "1":
-            añadir_pelicula(peliculas)
+            añadir_pelicula()
         elif opcion == "2":
-            eliminar_pelicula(peliculas)
+            eliminar_pelicula()
         elif opcion == "3":
-            mostrar_peliculas(peliculas)
+            mostrar_peliculas()
         elif opcion == "4":
-            buscar_pelicula(peliculas)
+            buscar_pelicula()
         elif opcion == "5":
-            modificar_pelicula(peliculas)
+            modificar_pelicula()
         elif opcion == "6":
-            sincronizar_peliculas(peliculas)
+            sincronizar_peliculas()
         elif opcion == "7":
             print(COLOR_ROJO + "Saliendo del programa..." + RESETEAR_COLOR)
             break
